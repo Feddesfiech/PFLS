@@ -8,13 +8,17 @@ num_seq=$(grep -c  '>' $1)
 
 tot_length=$(awk '/^>/ {next} {total += length($0)} END {print total}' "$1")
 
-longest_seq=$(echo "$tot_length" | sort -nr | head -n1)
+length=$(awk '/^>/ {next} {print length}' "$1")
 
-shortest_seq=$(echo "$tot_length" | sort -n | head -n1)
+longest_seq=$(echo "$length" | sort -nr | head -n1)
 
-# aver_seq_length=$($ bc <<< "$tot_length/$num_seq")
+shortest_seq=$(echo "$length" | sort -n | head -n1)
 
-gc_count= $(echo "$sequences" | grep -o '[GCgc]' | wc -l)
+aver_seq_length=$(echo "scale=2 ; $tot_length/$num_seq" | bc)
+
+gc_count=$(echo "$sequences" | grep -o '[GC]' | wc -l)
+
+gc_content=$(echo "scale=3 ; $gc_count*100/$tot_length" | bc)
 
 echo "FASTA File Statistics:"
 echo "----------------------"
@@ -23,4 +27,4 @@ echo "Total length of sequences: $tot_length"
 echo "Length of the longest sequence: $longest_seq"
 echo "Length of the shortest sequence: $shortest_seq"
 echo "Average sequence length: $aver_seq_length"
-echo "GC Content (%): $gc_cont"
+echo "GC Content (%): $gc_content"
