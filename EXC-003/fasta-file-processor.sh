@@ -4,7 +4,7 @@ if [ $# -ne 1 ]; then
 fi  
 sequences=$(awk '!/^>/{print}' "$1")
 
-num_seq=$(grep -c  '>' $1)
+num_seq=$(grep -c '^>' $1)
 
 tot_length=$(awk '/^>/ {next} {total += length($0)} END {print total}' "$1")
 
